@@ -12,14 +12,16 @@ public class EnderecoService {
         .setPrettyPrinting()
         .create();
         
-    public String consultarEnderecoPorCEP (String cep) throws Exception {
+    public Endereco consultarEnderecoPorCEP (String cep) throws Exception {
         String url = "https://viacep.com.br/ws/" + cep.replace("-", "") + "/json/";
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).build();
 
         try {
             HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-            return response.body();
+            String json = response.body();
+            EnderecoRecord enderecoRecord = gson.fromJson(json, EnderecoRecord.class);
+            return new Endereco(enderecoRecord);
         } catch (Exception e) {
             throw new Exception("Houve um problema ao fazer a requisição.");
         }
