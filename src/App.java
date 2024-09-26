@@ -15,6 +15,7 @@ import com.google.gson.GsonBuilder;
 public class App {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
+        BufferedWriter writer;
 
         Gson gson = new GsonBuilder()
         .setPrettyPrinting()
@@ -54,11 +55,15 @@ public class App {
             }
         }
 
-        BufferedWriter writer = new BufferedWriter(new FileWriter("lista-enderecos.txt"));
+        writer = new BufferedWriter(new FileWriter("lista-enderecos.txt"));
         for (Endereco endereco : enderecos) {
             writer.write(endereco.toString());
             writer.newLine();
         }
+        writer.close();
+
+        writer = new BufferedWriter(new FileWriter("lista-enderecos.json"));
+        writer.write(gson.toJson(enderecos));
         writer.close();
 
         System.out.println(enderecos);
